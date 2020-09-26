@@ -3,6 +3,7 @@ import './App.css'
 import Tmdb from './Tmdb';
 import MovieRow from './components/MovieRow';
 import FeaturedMovie from './components/FeaturedMovie';
+import Header from './components/Header'
 
 export default () => {
 
@@ -16,6 +17,11 @@ export default () => {
       setMovieList(list);
 
       // Pegando o Feature
+      let originals = list.filter((item) => item.slug === 'originals');
+      let randomChosen = Math.floor(Math.random() * (originals[0].items.results.length - 1));
+      let chosen = originals[0].items.results[randomChosen];
+      let chosenInfo = await Tmdb.getMovieInfo(chosen.id, 'tv');
+      setFeatureData(chosenInfo);
     }
 
     loadAll();
@@ -23,6 +29,8 @@ export default () => {
 
   return (
     <div className="page">
+
+      <Header />
 
       {featuredData &&
         <FeaturedMovie item={featuredData} />
